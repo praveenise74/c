@@ -1,0 +1,96 @@
+<!DOCTYPE html>
+<html>
+<head>
+<title>calc</title>
+
+</head>
+<style>
+#btn{
+width:110%;height:50px;font-size:105%;
+}
+#result{
+height:50px;font-size:105%;
+}
+
+</style>
+
+<body>
+<form name="calc">
+<center>
+<table border=1>
+<tr>
+<td colspan=5><input type="text" id="result" name="display" onkeypress="return event.charCode>=48 && event.charCode<=57"></td>
+</tr>
+<tr>
+<td><input type=button id=btn value="7" onclick="calc.display.value+='7'"></td>
+<td><input type=button id=btn value="8" onclick="calc.display.value+='8'"></td>
+<td><input type=button id=btn value="9" onclick="calc.display.value+='9'"></td>
+<td><input type=button id=btn value="/" onclick="calc.display.value+='/'"></td>
+<td><input type=button id=btn value="(" onclick="calc.display.value+='('"></td>
+</tr>
+<tr>
+<td><input type=button id=btn value="4" onclick="calc.display.value+='4'"></td>
+<td><input type=button id=btn value="5" onclick="calc.display.value+='5'"></td>
+<td><input type=button id=btn value="6" onclick="calc.display.value+='6'"></td>
+<td><input type=button id=btn value="*" onclick="calc.display.value+='*'"></td>
+<td><input type=button id=btn value=")" onclick="calc.display.value+=')'"></td>
+</tr>
+<tr>
+<td><input type=button id=btn value="1" onclick="calc.display.value+='1'"></td>
+<td><input type=button id=btn value="2" onclick="calc.display.value+='2'"></td>
+<td><input type=button id=btn value="3" onclick="calc.display.value+='3'"></td>
+<td><input type=button id=btn value="-" onclick="calc.display.value+='-'"></td>
+<td><input type=button id=btn value="%" onclick="calc.display.value+='%'"></td>
+</tr>
+<tr>
+<td><input type=button id=btn value="." onclick="calc.display.value+='.'"></td>
+<td><input type=button id=btn value="0" onclick="calc.display.value+='0'"></td>
+<td><input type=button id=btn value="=" onclick="calc.display.value=eval(calc.display.value)"></td>
+<td><input type=button id=btn value="+" onclick="calc.display.value+='+'"></td>
+<td><input type=button id=btn value="C" onclick="calc.display.value=''"></td>
+</tr>
+<tr align="center">
+<td colspan=5>Currency converter</td>
+</tr>
+<tr>
+<td  colspan=2><select id="cura">
+		<option>INR</option>
+		<option>USD</option>
+		</select></td>
+<td>--></td>
+<td colspan=2><select id="curb">
+		<option>USD</option>
+		<option>INR</option>
+		</select></td>
+</tr>
+<tr align="center"><td colspan=5><input type=button value="submit" onclick="calculate()"/></td></tr>
+
+</table>
+</center>
+</form>
+</body>
+
+<script>
+function calculate(){
+	var a=document.getElementById('cura').value;
+	var b=document.getElementById('curb').value;
+	var c=document.getElementById('result').value;
+	
+	switch(a)
+	{
+	case "INR" :if(b=="USD")
+			document.getElementById('result').value=(0.05*c);
+			else
+			document.getElementById('result').value=(1*c);
+			break;
+
+	case "USD" :if(b=="INR")
+			document.getElementById('result').value=(64.7*c);
+			break;
+	}
+}
+
+</script>
+
+
+</html>

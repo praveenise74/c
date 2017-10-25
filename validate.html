@@ -1,0 +1,88 @@
+<!DOCTYPE html>
+<html>
+<head>
+<title>signup</title>
+<style>
+
+body{
+	color:red;
+	
+}
+
+label{
+	text-align:right;
+	display:inline-block;
+	width:100px;
+}
+
+input{
+	margin:10px;
+}
+</style>
+</head>
+<body>
+<center>
+	<form id="form">
+		<label>FirstName:</label>
+		<input type="text" id="firstname"/><br/>
+		
+		<label>LastName</label>
+		<input type='text' id="lastname"/><br/>
+
+		<label>DOB:</label>
+		<input type="text" id="dob"><br/>
+
+		<label>Mobile</label>	
+		<input type="text" id="mob" /><br/>
+
+		<label>Email:</label>
+		<input type="email" id="email"/><br/>
+
+		<input type="button" value="Submit" onclick="validate()">
+	</form>
+</center>
+</body>
+<script>
+
+	function validate()
+	{
+	var flag=1;
+	var fn=document.getElementById('firstname').value;
+	if(fn.search(/^[a-zA-Z]+$/)!=0 || fn.length<=0){
+		alert("First name is Invalid!");
+		flag=0;}
+	
+	var ln=document.getElementById('lastname').value;
+	if(ln.search(/^[a-zA-Z]+$/)!=0 || ln.length<=0){
+		alert("Last nameis invalid");
+		flag=0;}
+
+	var dob=document.getElementById('dob').value;
+	if(dob.search(/^\d{2}-\d{2}-\d{4}$/) !=0 || dob.length<=0){
+		alert("Date of birth is invalid");
+		flag=0;}
+
+	var mob=document.getElementById('mob').value;
+	if(isNaN(mob)!=0 || mob.length!=10){
+		alert("Mobile number is invalid");
+		flag=0;}
+
+	var email=document.getElementById('email').value;
+	if(email.search(/^[a-zA-Z0-9._]+@[a-z0-9_.]+\.[a-z]{2,3}$/) !=0)
+	{	alert("Email address is invalid");
+		flag=0;}
+	
+		
+	if(flag==1)
+		{
+			alert("Form successfuly submited");
+			document.getElementById("firstname").value="";
+			document.getElementById("lastname").value="";
+			document.getElementById("dob").value="";
+			document.getElementById("mob").value="";
+			document.getElementById("email").value="";
+		}
+}
+
+</script>
+</html>

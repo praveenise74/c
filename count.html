@@ -1,0 +1,37 @@
+<!DOCTYPE html>
+<html>
+	<head>
+		<title>count</title>
+		
+	</head>
+	<body bgcolor="blue">
+		<form>
+			
+				<p>write some paragraph</p>
+				<textarea id="txt"></textarea>
+				<br/>
+				<input type="submit" value="submit" onclick="count()"/>
+			
+		</form>
+	</body>
+<style>
+			#txt{
+				height:200px;
+				width:250px;
+			}
+		</style>
+
+		<script>
+
+			function count()
+			{
+				var txt=document.getElementById('txt').value;
+				var no_char=txt.length-(txt.split(/\n+/).length-1);
+				var word=txt.split(/\s+/).length;
+				var line=txt.split(/\n+/).length;
+
+				alert("Total character : "+no_char+" Total word : "+word+" Total line : "+line);
+			}
+		</script>
+
+</html>

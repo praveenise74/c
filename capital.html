@@ -1,0 +1,41 @@
+<!DOCTYPE html>
+<html>
+<head>
+<title>capital</title>
+</head>
+<style>
+font-size:20px;
+font-weight:bold;
+color:green;
+</style>
+<body>
+<center>
+</br>
+</br>
+<select id=con onchange="capital()">
+<option>--Select Country--</option>
+<option>India</option>
+<option value="USA">USA</option>
+<option value="France">France</option>
+<option value="Pakistan">Pakistan</option>
+<option value="Australia">Australia</option>
+</select>
+<br/>
+<p id="cap"></p>
+</center>
+</body>
+<script>
+	function capital(){
+		var country=document.getElementById('con').value;
+		switch(country)
+		{
+		case "--Select Country--" : document.getElementById('cap').innerHTML="";break;
+		case "India" : document.getElementById('cap').innerHTML="New Delhi";break;
+		case "USA" : document.getElementById('cap').innerHTML="Washington DC";break;
+		case "France" : document.getElementById('cap').innerHTML="Paris";break;
+		case "Pakistan" : document.getElementById('cap').innerHTML="Islamabad";break;
+		case "Australia" : document.getElementById('cap').innerHTML="Sydney";break;
+		}
+}
+</script>
+</html>
