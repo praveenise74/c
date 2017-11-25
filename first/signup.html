@@ -1,0 +1,55 @@
+<html>
+ <head><title>SignUp!</title></head>
+ <body>
+  <form action="insert.php" method="POST" name="signup" onsubmit="return validateform()">
+   <p>Firstname : <input type="text" name="fn"></p>
+   <p>Lastname : <input type="text" name="ln"></p>
+   <p>DOB : <input type="text" name="dob"></p>
+   <p>Mobile : <input type="text" name="mob"></p>
+   <p>Email : <input type="text" name="email"></p>
+   <p><input type="submit" value="Submit"></p>
+  </form>
+ <script>
+	function validateform(){
+
+	var fn=document.signup.fn.value;
+	if(!fn.match(/^[A-Za-z]+$/)){
+		alert("Invalid firstname");
+		return false;
+	}
+
+	var ln=document.signup.ln.value;
+	if(!ln.match(/^[A-Za-z]+$/)){
+		alert("Invalid lastname");
+		return false;
+	}
+
+	var mob = document.signup.mob.value;  
+  	if(!mob.match(/^\d{10}$/))  {
+  		alert("Invalid Mobile number")
+  		return false;
+  	}
+  	
+  	var dob = document.signup.dob.value;
+    if(!dob.match(/^(\d{1,2})\/(\d{1,2})\/(\d{4})$/)) {
+      alert("Invalid date format ");
+      return false;
+    }
+
+  	var email = document.signup.email.value;
+ /* 	if(!(/^\w+([\.-]?\w+)*@\w+([\.-]?\w+)*(\.\w{2,3})+$/.test(email))){
+  		alert("Invalid email address!")  
+    	return false;
+  	}*/
+	if(email.search(/^[a-zA-Z0-9._]+@{1}[a-z]+\.[a-z]{2,3}$/) !=0)
+	{	alert("Email address is invalid");
+		return false;}
+	
+	
+	
+    alert("Form Validated! Submiting...")
+  	return true;
+  }
+</script>
+</body>
+</html>

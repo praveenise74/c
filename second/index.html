@@ -1,0 +1,21 @@
+<html> 
+ <head><title>Search & Show</title></head>
+ <body>
+  <form action="search.php" method="post" name="search">
+   <p>Search by Name or ID or Mobile: </p>
+   <p><input type="text" name="srch"></p>
+   <pre><input type="button" value="Search" name="by_name_id" onclick="return validateform()">  <input type="submit" value="Dispaly All" name="all"></pre>
+  </form>
+  <script>
+  	function validateform(){
+
+	var fn=document.search.srch.value;
+	if(!fn.match(/^[A-Za-z0-9 ]+$/)){
+		alert("Invalid Name or ID or Mobile");
+		return false;
+	}
+  	document.search.submit();
+  }
+  </script>
+ </body>
+</html>
