@@ -1,19 +1,19 @@
 #include<stdio.h>
 #include<stdlib.h>
 #include<mpi.h>
-void swap(int *v,int i,int j)
+void swap(int *v1,int *v2)
 {
-	int t=v[i];
-	v[i]=v[j];
-	v[j]=t;
+	int t=*v1;
+	*v1=*v2;
+	*v2=t;
 }
 void bubblesort(int *v,int n)
 {
 	int i,j;
-	for(i=n-2;i>=0;i--)
-	for(j=0;j<=i;j++)
+	for(i=0;i<n-1;i++)
+	for(j=0;j<n-i-1;j++)
 	if(v[j]>v[j+1])
-	swap(v,j,j+1);
+	swap(&v[j],&v[j+1]);
 }
 int *merge(int *v1,int n1,int *v2,int n2)
 {
@@ -53,31 +53,26 @@ int *merge(int *v1,int n1,int *v2,int n2)
 }
 int main(int argc,char **argv)
 {
-	int n,c,s,o,step,p,id,*data=NULL,*chunk,*other;
-	MPI_Status stat;
+	int n,c,o,step,p,id,*data=NULL,*chunk,*other,i;
 	double elapsed_time;
 	FILE *file=NULL;
-	int i;
 	
+	MPI_Status stat;
 	MPI_Init(&argc,&argv);
 	MPI_Comm_size(MPI_COMM_WORLD,&p);
 	MPI_Comm_rank(MPI_COMM_WORLD,&id);
 	if(id==0)
 	{
-		if((n%p)!=0 && (p%2)!=0)
+		n=20;
+		if((n%p)!=0||(p%2)!=0)
 		{
 
-			printf("NUMBER OF PROCESSES SHOULD BE EVEN AND DEVIDE 20\n");
-			MPI_Finalize();
-	        return 0;
+			printf("NUMBER OF PROCESSES SHOULD BE FACTOR OF 'n' and EVEN\n");
+	        	exit(0);
 
 		} 
 		file=fopen("numbers.txt","r");
-		//fscanf(file,"%d",&n);
-		n=20;
-		c=n/p;
-		if(n%p)
-			c++;
+
 		data=(int *)malloc(20*sizeof(int));
 		for(i=0;i<20;i++)
 			fscanf(file,"%d",&(data[i]));
@@ -89,48 +84,42 @@ int main(int argc,char **argv)
 	elapsed_time=-MPI_Wtime();
 	MPI_Bcast(&n,1,MPI_INT,0,MPI_COMM_WORLD);
 	c=n/p;
-	//printf("HI I AM %d and C VALUE IS %d\n",id,c);
-	if(n%p)
-		c++;
+     
+	printf("MY RANK == %d and size is %d\n",id,c);
 	chunk=(int *)malloc(c*sizeof(int));
 	MPI_Scatter(data,c,MPI_INT,chunk,c,MPI_INT,0,MPI_COMM_WORLD);
 	free(data);
 	
 	data=NULL;
-//	s=(n >= (c*(id+1)))?c:n-c*id;
-	s=n/p;
-	printf("MY RANK == %d and size is %d\n",id,s);
-	for(i=0;i<(n/p);i++)
-		printf("\nrank %d==%d\n",id,chunk[i]);
-	bubblesort(chunk,s);
+
+
+	printf("MY RANK == %d and size is %d\n",id,c);
+	for(i=0;i<c;i++)
+		printf("\nrank %d data =%d\n",id,chunk[i]);
+	bubblesort(chunk,c);
 	MPI_Barrier(MPI_COMM_WORLD);
 	
-	/*printf("\nAFTER SORT \n");
-	for(i=0;i<s;i++)
-		printf("I AM %d --%d\t",id,chunk[i]);*/
 
 	for(step=1;step<p;step=2*step)
 	{
 		if(id%(2*step)!=0)
 		{
-			MPI_Send(chunk,s,MPI_INT,id-step,0,MPI_COMM_WORLD);
+			MPI_Send(chunk,c,MPI_INT,id-step,0,MPI_COMM_WORLD);
 			free(chunk);
 			break;
 		}
 		if(id+step<p)
 		{
 			o=(n>=c*(id+2*step))?c*step:n-c*(id+step);
-			printf("MY RANK == %d and o is %d\n",id,o);
+			printf("MY RANK = %d and o is %d\n",id,o);
 			other=(int *)malloc(o*sizeof(int));
-			MPI_Recv(other,s,MPI_INT,id+step,0,MPI_COMM_WORLD,&stat);
-			data=merge(chunk,s,other,o);
+			MPI_Recv(other,c,MPI_INT,id+step,0,MPI_COMM_WORLD,&stat);
+			data=merge(chunk,c,other,o);
 			free(chunk);
 			free(other);
 			chunk=data;
-			s=s+c;
-			printf("\nRANK IS %d and CHUNK is %d\n",id,s);
-			//for(i=0;i<s;i++)
-			//	printf("\nRANK IS %d and CHUNK is %d\n",id,chunk[i]);
+			c=c+c;
+			printf("\nRANK IS %d and CHUNK size is %d\n",id,c);
 		}
 	}
 	
@@ -138,7 +127,6 @@ int main(int argc,char **argv)
 	if(id==0)
 	{
 		file=fopen("result.txt","w");
-		//fprintf(file,"%d\n",5);
 		for(i=0;i<20;i++)
 			fprintf(file,"%d\n",chunk[i]);
 		fclose(file);

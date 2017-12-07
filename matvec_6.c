@@ -1,46 +1,57 @@
 #include<stdio.h>
+#include<stdlib.h>
 #include<mpi.h>
- int main(int argc,char *argv[])
+
+int main(int argc,char *argv[])
 {
- int a[4][4],b[4],rec_buf[4],gathered_arr[4],size,rank,i,j,sum=0,k,prod;
+ int size,rank,sum=0,i,j,recv_buf[4],a[4][4],b[4],gather_buf[4];
+ 
  MPI_Init(&argc,&argv);
  MPI_Comm_rank(MPI_COMM_WORLD,&rank);
  MPI_Comm_size(MPI_COMM_WORLD,&size);
+ 
  if(rank==0)
-{
-        printf("enter matrix\n");
-       	for(i=0;i<4;i++)
-	       	for(j=0;j<4;j++)
-			scanf("%d",&a[i][j]);
-	printf("enter b matrix\n");
-	for(i=0;i<4;i++)
-		scanf("%d",&b[i]);
-}
- MPI_Scatter(&a,4,MPI_INT,rec_buf,4,MPI_INT,0,MPI_COMM_WORLD);
- MPI_Bcast(&b,4,MPI_INT,0,MPI_COMM_WORLD);
- for(i=0;i<size;i++)
-{
-	printf("my rank=%d,rec_buf=%d\n",rank,rec_buf[i]);
-}
+ {
+  printf("\nEnter matrix of size 4*4:\n");
+  for(i=0;i<4;i++)
+  for(j=0;j<4;j++){
+     scanf("%d",&a[i][j]);
+    }
 
- for(i=0;i<size;i++)
-{
-        printf("my rank=%d,b=%d\n",rank,b[i]);
-}
+  printf("\nEnter matrix of size 4*1\n");
+   for(i=0;i<4;i++)
+     scanf("%d",&b[i]);
+ }
+
+ MPI_Scatter(&a,4,MPI_INT,recv_buf,4,MPI_INT,0,MPI_COMM_WORLD);
+ MPI_Bcast(&b,4,MPI_INT,0,MPI_COMM_WORLD);
+
+ for(i=0;i<4;i++)
+  {
+    printf("\nmy rank = %d and recv_buf= %d",rank,recv_buf[i]);
+  }
+   
+ for(i=0;i<4;i++)
+  {
+   printf("\nmy rank= %d and b=%d",rank,b[i]);
+  }
 
  for(j=0;j<4;j++)
-{
-	sum=sum+(rec_buf[j]*b[j]);
-}
+ {
+  sum=sum+(recv_buf[j]*b[j]);
+ }
+ printf("\nRANK = %d and RESULT = %d ",rank,sum);
+ MPI_Gather(&sum,1,MPI_INT,gather_buf,1,MPI_INT,0,MPI_COMM_WORLD);
 
- printf("RANK=%d AND RES=%d\n",rank,sum);
- MPI_Gather(&sum,1,MPI_INT,gathered_arr,1,MPI_INT,0,MPI_COMM_WORLD);
  if(rank==0)
-{
- for(i=0;i<4;i++)
- printf("%d\t",gathered_arr[i]);
-}
-			
+  {
+   printf("\nOutput :-\n");
+   for(i=0;i<4;i++)
+    {
+     printf("| %2d |\n",gather_buf[i]);
+    }
+  }
+
  MPI_Finalize();
 }
 
